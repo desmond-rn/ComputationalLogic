@@ -29,6 +29,10 @@ pred(penguin, 1,[n/penguin]).
 pred(sparrow, 1,[n/sparrow]).
 pred(fly,     1,[v/fly]).
 
+%%%%% -------------->  I added this  <-----------------
+pred(genius,   1,[n/genius]).
+pred(win_prizes,     1,[v/win_prizes]).
+
 pred2gr(P,1,C/W,X=>Lit):-
 	pred(P,1,L),
 	member(C/W,L),
@@ -37,11 +41,13 @@ pred2gr(P,1,C/W,X=>Lit):-
 noun_s2p(Noun_s,Noun_p):-
 	( Noun_s=woman -> Noun_p=women
 	; Noun_s=man -> Noun_p=men
+	; Noun_s=genius -> Noun_p=geniuses			%%%%% -------------->  I added this  <-----------------
 	; atom_concat(Noun_s,s,Noun_p)
 	).
 
 verb_p2s(Verb_p,Verb_s):-
 	( Verb_p=fly -> Verb_s=flies
+	;	Verb_p=win_prizes -> Verb_s=wins_prizes
 	; 	atom_concat(Verb_p,s,Verb_s)
 	).
 
@@ -67,11 +73,17 @@ property(p,M) --> noun(p,M).
 
 determiner(s,X=>B,X=>H,[(H:-B)]) --> [every].
 determiner(p,X=>B,X=>H,[(H:-B)]) --> [all].
-%determiner(p,X=>B,X=>H,[(H:-B)]) --> [].
-%determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2 :- true)]) -->[some].
+
+%%%%% -------------->  I uncommented this  <-----------------
+determiner(p,X=>B,X=>H,[(H:-B)]) --> [].
+determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2:-true)]) -->[some].
 
 proper_noun(s,tweety) --> [tweety].
 proper_noun(s,peter) --> [peter].
+
+%%%%% -------------->  I added this  <-----------------
+proper_noun(s,roussel) --> [roussel].
+proper_noun(s,desmond) --> [desmond].
 
 
 %%% questions %%%
