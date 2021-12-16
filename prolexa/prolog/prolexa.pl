@@ -19,12 +19,12 @@
 
 
 %some intial stored rules
-% stored_rule(1,[(mortal(X):-human(X))]).
-% stored_rule(1,[(human(peter):-true)]).
+stored_rule(1,[(mortal(X):-human(X))]).
+stored_rule(1,[(human(peter):-true)]).
 
 %%%%% -------------->  I uncommented this  <-----------------
 stored_rule(1,[(human(sk):-true), (genius(sk):-true)]).
-stored_rule(1,[(win_prizes(X):-genius(X))]).
+stored_rule(1,[(win(X):-genius(X))]).
 % stored_rule(1,[(genius(desmond):-true)]).
 
 

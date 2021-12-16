@@ -12,6 +12,17 @@
 
 %%% Main question-answering engine adapted from nl_shell.pl %%%
 
+%%%-----> New version with existencial quantification <---- %%%
+prove_question(Query,SessionId,Answer):-
+	findall(R,prolexa:stored_rule(SessionId,R),Rulebase),
+	( prove_rb([Query,SecondQuery],Rulebase) ->
+		transform([Query,SecondQuery],Clauses),
+		phrase(sentence(Clauses),AnswerAtomList),
+		atomics_to_string(AnswerAtomList," ",Answer)
+	; Answer = 'Sorry, I don\'t think this is the case'
+	).	
+
+%%%-----> Main version of prove question <---- %%%
 prove_question(Query,SessionId,Answer):-
 	findall(R,prolexa:stored_rule(SessionId,R),Rulebase),
 	( prove_rb(Query,Rulebase) ->
@@ -38,6 +49,18 @@ explain_question(Query,SessionId,Answer):-
 	( prove_rb(Query,Rulebase,[],Proof) ->
 		maplist(pstep2message,Proof,Msg),
 		phrase(sentence1([(Query:-true)]),L),
+		atomic_list_concat([therefore|L]," ",Last),
+		append(Msg,[Last],Messages),
+		atomic_list_concat(Messages,"; ",Answer)
+	; Answer = 'Sorry, I don\'t think this is the case'
+	).
+
+%%%------> I added this second version for proof of existential quantification <------%%%%%%%%
+explain_question([Query,SecondQuery],SessionId,Answer):-
+	findall(R,prolexa:stored_rule(SessionId,R),Rulebase),
+	( prove_rb([Query,SecondQuery],Rulebase,[],Proof) ->
+		maplist(pstep2message,Proof,Msg),
+		phrase(sentence1([(Query:-true),(SecondQuery:-true)]),L),
 		atomic_list_concat([therefore|L]," ",Last),
 		append(Msg,[Last],Messages),
 		atomic_list_concat(Messages,"; ",Answer)
@@ -79,6 +102,24 @@ prove_rb(A,Rulebase,P0,P):-
     find_clause((A:-B),Rule,Rulebase),
 	prove_rb(B,Rulebase,[p(A,Rule)|P0],P).
 
+%%%%%%%----------> For existential quantification <-----------%%%%%%%%
+prove_rb([true,true],_Rulebase,P,P) :- !.
+% prove_rb([A,true],Rulebase,P0,P) :- prove_rb(A,Rulebase,P0,P), !.
+% prove_rb([true,A],Rulebase,P0,P) :- prove_rb(A,Rulebase,P0,P), !.
+prove_rb([A,C],Rulebase,P0,P):-
+	find_clause([(A:-B),D],Rule,Rulebase),
+	(
+		var(D) ->  		%%% D is uninstantiated
+		prove_rb([B,C],Rulebase,[p(A,Rule)|P0],P) 
+		; 
+		D = (C:-E),
+		prove_rb([B,E],Rulebase,[p(A,Rule),p(C,Rule)|P0],P)
+	).
+
+%%%%%%%----------> For proof of existential quantification <-----------%%%%%%%%
+prove_rb([A,C],Rulebase,P0,P):-
+	prove_rb((A,C),Rulebase,P0,P).
+
 % top-level version that ignores proof
 prove_rb(Q,RB):-
 	prove_rb(Q,RB,[],_P).
@@ -87,11 +128,32 @@ prove_rb(Q,RB):-
 %%% Utilities from nl_shell.pl %%%
 
 find_clause(Clause,Rule,[Rule|_Rules]):-
-	copy_term(Rule,[Clause]).	% do not instantiate Rule
+	copy_term(Rule,[Clause]).			% do not instantiate Rule
+
+%%%%%%%----------> For  existential quantification <-----------%%%%%%%%
+find_clause(Clause,Rule,[Rule|_Rules]):-
+	Rule = [Rule1|Rule2],
+	(
+		Clause = [Clause1,Clause2] ->
+		(
+			copy_term([Rule1],[Clause1]) ->
+			( Rule2 = [El|_] -> Clause2 = El ; true )
+			; copy_term(Rule2,[Clause1]),
+			Clause2 = Rule1
+		)
+		;
+		(
+			copy_term([Rule1],[Clause]) ->
+			true
+		; 	copy_term(Rule2,[Clause])
+		)
+	).
+
 find_clause(Clause,Rule,[_Rule|Rules]):-
 	find_clause(Clause,Rule,Rules).
 
 % transform instantiated, possibly conjunctive, query to list of clauses
+transform([A,B],[(A:-true),(B:-true)]).
 transform((A,B),[(A:-true)|Rest]):-!,
     transform(B,Rest).
 transform(A,[(A:-true)]).

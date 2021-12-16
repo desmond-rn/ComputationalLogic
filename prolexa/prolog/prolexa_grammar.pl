@@ -31,7 +31,7 @@ pred(fly,     1,[v/fly]).
 
 %%%%% -------------->  I added this  <-----------------
 pred(genius,   1,[n/genius]).
-pred(win_prizes,     1,[v/win_prizes]).
+pred(win,     1,[v/win]).
 
 pred2gr(P,1,C/W,X=>Lit):-
 	pred(P,1,L),
@@ -47,7 +47,6 @@ noun_s2p(Noun_s,Noun_p):-
 
 verb_p2s(Verb_p,Verb_s):-
 	( Verb_p=fly -> Verb_s=flies
-	;	Verb_p=win_prizes -> Verb_s=wins_prizes
 	; 	atom_concat(Verb_p,s,Verb_s)
 	).
 
@@ -65,6 +64,10 @@ sentence1([(L:-true)]) --> proper_noun(N,X),verb_phrase(N,X=>L).
 
 verb_phrase(s,M) --> [is],property(s,M).
 verb_phrase(p,M) --> [are],property(p,M).
+
+%%%%% -------------->  I added this  <-----------------
+verb_phrase(N,M) --> iverb(N,M),[prizes].
+
 verb_phrase(N,M) --> iverb(N,M).
 
 property(N,M) --> adjective(N,M).
@@ -77,6 +80,8 @@ determiner(p,X=>B,X=>H,[(H:-B)]) --> [all].
 %%%%% -------------->  I uncommented this  <-----------------
 determiner(p,X=>B,X=>H,[(H:-B)]) --> [].
 determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2:-true)]) -->[some].
+%%%%% -------------->  I added this  <-----------------
+determiner(p, sk=>H1, sk=>H2, [(H2:-true),(H1:-true)]) -->[some].
 
 proper_noun(s,tweety) --> [tweety].
 proper_noun(s,peter) --> [peter].
@@ -116,6 +121,7 @@ command(g(retractall(prolexa:stored_rule(_,C)),"I erased it from my memory")) --
 command(g(retractall(prolexa:stored_rule(_,_)),"I am a blank slate")) --> forgetall. 
 command(g(all_rules(Answer),Answer)) --> kbdump. 
 command(g(all_answers(PN,Answer),Answer)) --> tellmeabout,proper_noun(s,PN).
+command(g(explain_question([Q1,Q2],_,Answer),Answer)) --> [explain,why],sentence1([(Q1:-true),(Q2:-true)]).			%%%------> I added this <------%%%%%%%%
 command(g(explain_question(Q,_,Answer),Answer)) --> [explain,why],sentence1([(Q:-true)]).
 command(g(random_fact(Fact),Fact)) --> getanewfact.
 %command(g(pf(A),A)) --> peterflach. 
