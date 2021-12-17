@@ -70,8 +70,9 @@ sword --> [that].
 sentence1(C) --> determiner(N,M1,M2,C),noun(N,M1),verb_phrase(N,M2).
 sentence1([(L:-true)]) --> proper_noun(N,X),verb_phrase(N,X=>L).
 
-%%%%% -------------->  I added this for negation  <-----------------
-% sentence1(C) --> determiner(N,M1,M2,D),noun(N,M1),verb_phrase(N,M3), {M3=[(not M2)], D=[E], C=[not E]}.
+%%%%% -------------->  I added this for negation and default rule <-----------------
+% sentence1(C) --> determiner(N,M1,M2,D),noun(N,M1),verb_phrase(N,M3), {M3=[(not M2)], D=[(E)], C=[(not C1:-C2)], E=(E1:-E2), C1=E1, C2=E2}.
+sentence1(C) --> determiner(N,M1,M2,_D),noun(N,M1),verb_phrase(N,M2), [except], noun(N,M3), {C=[(C1:-C2,not C3)], M1=(_X2=>C2), M2=(_X1=>C1), M3=(_X3=>C3)}.
 sentence1(C) --> proper_noun(N,X),verb_phrase(N,T), {T=[(not X=>L)], C=[(not L:-true )]}.
 
 
@@ -79,19 +80,23 @@ verb_phrase(s,M) --> [is],property(s,M).
 verb_phrase(p,M) --> [are],property(p,M).
 
 %%%%% -------------->  I added this  <-----------------
-verb_phrase(N,M) --> iverb(N,M),[prizes].
+% verb_phrase(N,M) --> iverb(N,M),[prizes].
+
+verb_phrase(N,M) --> iverb(N,M).
 
 %%%%% -------------->  I added this for negation  <-----------------
 verb_phrase(s,N) --> [is,not],property(s,M), {N=[(not M)]}.
 verb_phrase(p,N) --> [are,not],property(p,M), {N=[(not M)]}.
 
-verb_phrase(N,M) --> iverb(N,M).
+%%%%% -------------->  I added this for default rule  <-----------------
+verb_phrase(s,N) --> [does, not],iverb(p,M), {N=[(not M)]}.
+verb_phrase(p,N) --> [do, not],iverb(p,M), {N=[(not M)]}.
 
 property(N,M) --> adjective(N,M).
 property(s,M) --> [a],noun(s,M).
 property(p,M) --> noun(p,M).
 
-determiner(s,X=>B,X=>H,[(H:-B)]) --> [every].
+% determiner(s,X=>B,X=>H,[(H:-B)]) --> [every].
 determiner(p,X=>B,X=>H,[(H:-B)]) --> [all].
 
 %%%%% -------------->  I uncommented this  <-----------------
@@ -100,8 +105,8 @@ determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2:-true)]) -->[some].
 %%%%% -------------->  I added this  <-----------------
 determiner(p, sk=>H1, sk=>H2, [(H2:-true),(H1:-true)]) -->[some].
 
-% proper_noun(s,tweety) --> [tweety].
-% proper_noun(s,peter) --> [peter].
+proper_noun(s,tweety) --> [tweety].
+proper_noun(s,peter) --> [peter].
 
 %%%%% -------------->  I added this  <-----------------
 % proper_noun(s,roussel) --> [roussel].
