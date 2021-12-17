@@ -19,14 +19,17 @@
 
 
 %some intial stored rules
-stored_rule(1,[(mortal(X):-human(X))]).
-stored_rule(1,[(human(peter):-true)]).
+% stored_rule(1,[(mortal(X):-human(X))]).
+% stored_rule(1,[(human(peter):-true)]).
 
-%%%%% -------------->  I uncommented this  <-----------------
-stored_rule(1,[(human(sk):-true), (genius(sk):-true)]).
-stored_rule(1,[(win(X):-genius(X))]).
-% stored_rule(1,[(genius(desmond):-true)]).
+% %%%%% -------------->  I uncommented this  <-----------------
+% stored_rule(1,[(human(sk):-true), (genius(sk):-true)]).
+% stored_rule(1,[(win(X):-genius(X))]).
+% % stored_rule(1,[(genius(desmond):-true)]).
 
+%%%%% -------------->  For negation  <-----------------
+stored_rule(1,[(happy(X):-teacher(X))]).
+stored_rule(1,[(not happy(donald):-true)]).
 
 
 %%% Prolexa Command Line Interface %%%

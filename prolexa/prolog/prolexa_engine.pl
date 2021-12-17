@@ -12,15 +12,15 @@
 
 %%% Main question-answering engine adapted from nl_shell.pl %%%
 
-%%%-----> New version with existencial quantification <---- %%%
-prove_question(Query,SessionId,Answer):-
-	findall(R,prolexa:stored_rule(SessionId,R),Rulebase),
-	( prove_rb([Query,SecondQuery],Rulebase) ->
-		transform([Query,SecondQuery],Clauses),
-		phrase(sentence(Clauses),AnswerAtomList),
-		atomics_to_string(AnswerAtomList," ",Answer)
-	; Answer = 'Sorry, I don\'t think this is the case'
-	).	
+%%%-----> New version with existential quantification <---- %%%
+% prove_question(Query,SessionId,Answer):-
+% 	findall(R,prolexa:stored_rule(SessionId,R),Rulebase),
+% 	( prove_rb([Query,SecondQuery],Rulebase) ->
+% 		transform([Query,SecondQuery],Clauses),
+% 		phrase(sentence(Clauses),AnswerAtomList),
+% 		atomics_to_string(AnswerAtomList," ",Answer)
+% 	; Answer = 'Sorry, I don\'t think this is the case'
+% 	).	
 
 %%%-----> Main version of prove question <---- %%%
 prove_question(Query,SessionId,Answer):-
@@ -101,6 +101,14 @@ prove_rb((A,B),Rulebase,P0,P):-!,
 prove_rb(A,Rulebase,P0,P):-
     find_clause((A:-B),Rule,Rulebase),
 	prove_rb(B,Rulebase,[p(A,Rule)|P0],P).
+
+%%%%%%%----------> For negation <-----------%%%%%%%%
+prove_rb(not B,Rulebase,P0,P):-
+    find_clause((A:-B),Rule,Rulebase),
+	prove_rb(not A,Rulebase,[p(not B,Rule)|P0],P).
+prove_rb(not A,Rulebase,P0,P):-
+    prove_rb(A,Rulebase,P0,P), !, fail.
+prove_rb(not _A,_Rulebase,_P0,_P):-!.
 
 %%%%%%%----------> For existential quantification <-----------%%%%%%%%
 prove_rb([true,true],_Rulebase,P,P) :- !.

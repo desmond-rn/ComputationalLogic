@@ -6,6 +6,11 @@ utterance(C) --> command(C).
 
 :- op(600, xfy, '=>').
 
+%%%%% -------------->  For negation  <-----------------
+% not(Goal):-call(Goal),!,fail.
+% not(_Goal).
+:- op(900, fy, not).
+
 
 %%% lexicon, driven by predicates %%%
 
@@ -32,6 +37,9 @@ pred(fly,     1,[v/fly]).
 %%%%% -------------->  I added this  <-----------------
 pred(genius,   1,[n/genius]).
 pred(win,     1,[v/win]).
+
+pred(happy,   1,[a/happy]).
+pred(teacher,     1,[n/teacher]).
 
 pred2gr(P,1,C/W,X=>Lit):-
 	pred(P,1,L),
@@ -62,11 +70,20 @@ sword --> [that].
 sentence1(C) --> determiner(N,M1,M2,C),noun(N,M1),verb_phrase(N,M2).
 sentence1([(L:-true)]) --> proper_noun(N,X),verb_phrase(N,X=>L).
 
+%%%%% -------------->  I added this for negation  <-----------------
+% sentence1(C) --> determiner(N,M1,M2,D),noun(N,M1),verb_phrase(N,M3), {M3=[(not M2)], D=[E], C=[not E]}.
+sentence1(C) --> proper_noun(N,X),verb_phrase(N,T), {T=[(not X=>L)], C=[(not L:-true )]}.
+
+
 verb_phrase(s,M) --> [is],property(s,M).
 verb_phrase(p,M) --> [are],property(p,M).
 
 %%%%% -------------->  I added this  <-----------------
 verb_phrase(N,M) --> iverb(N,M),[prizes].
+
+%%%%% -------------->  I added this for negation  <-----------------
+verb_phrase(s,N) --> [is,not],property(s,M), {N=[(not M)]}.
+verb_phrase(p,N) --> [are,not],property(p,M), {N=[(not M)]}.
 
 verb_phrase(N,M) --> iverb(N,M).
 
@@ -83,12 +100,14 @@ determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2:-true)]) -->[some].
 %%%%% -------------->  I added this  <-----------------
 determiner(p, sk=>H1, sk=>H2, [(H2:-true),(H1:-true)]) -->[some].
 
-proper_noun(s,tweety) --> [tweety].
-proper_noun(s,peter) --> [peter].
+% proper_noun(s,tweety) --> [tweety].
+% proper_noun(s,peter) --> [peter].
 
 %%%%% -------------->  I added this  <-----------------
-proper_noun(s,roussel) --> [roussel].
-proper_noun(s,desmond) --> [desmond].
+% proper_noun(s,roussel) --> [roussel].
+% proper_noun(s,desmond) --> [desmond].
+
+proper_noun(s,donald) --> [donald].
 
 
 %%% questions %%%
@@ -98,6 +117,9 @@ question(Q) --> qword,question1(Q).
 qword --> [].
 %qword --> [if]. 
 %qword --> [whether]. 
+
+%%%%% -------------->  I added this for negation <-----------------
+question1(not P) --> [who],verb_phrase(s,Q),{Q=[(not _X=>P)]}.
 
 question1(Q) --> [who],verb_phrase(s,_X=>Q).
 question1(Q) --> [is], proper_noun(N,X),property(N,X=>Q).
