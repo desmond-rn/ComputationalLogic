@@ -28,15 +28,13 @@
 % % stored_rule(1,[(genius(desmond):-true)]).
 
 %%%%% -------------->  For negation  <-----------------
-stored_rule(1,[(happy(X):-teacher(X))]).
-stored_rule(1,[(not happy(donald):-true)]).
+% stored_rule(1,[(happy(X):-teacher(X))]).
+% stored_rule(1,[(not happy(donald):-true)]).
 
 %%%%% -------------->  For default rule  <-----------------
-% stored_rule(1,[(fly(X):-bird(X))]).
-% stored_rule(1,[(not fly(X):-penguin(X))]).
-stored_rule(1,[(fly(X):-bird(X),not penguin(X))]).
-stored_rule(1,[(bird(tweety):-true)]).
-stored_rule(1,[(penguin(tweety):-true)]).
+% stored_rule(1,[(fly(X):-bird(X),not penguin(X))]).
+% stored_rule(1,[(bird(tweety):-true)]).
+% stored_rule(1,[(penguin(tweety):-true)]).
 
 %%%%% -------------->  Goog test default rule + negation  <-----------------
 % stored_rule(1,[(not happy(X):-not penguin(X))]).
