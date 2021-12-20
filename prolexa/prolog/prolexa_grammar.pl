@@ -72,7 +72,7 @@ sentence1([(L:-true)]) --> proper_noun(N,X),verb_phrase(N,X=>L).
 
 %%%%% -------------->  I added this for negation and default rule <-----------------
 % sentence1(C) --> determiner(N,M1,M2,D),noun(N,M1),verb_phrase(N,M3), {M3=[(not M2)], D=[(E)], C=[(not C1:-C2)], E=(E1:-E2), C1=E1, C2=E2}.
-sentence1(C) --> determiner(N,M1,M2,_D),noun(N,M1),verb_phrase(N,M2), [except], noun(N,M3), {C=[(C1:-C2,not C3)], M1=(_X2=>C2), M2=(_X1=>C1), M3=(_X3=>C3)}.
+% sentence1(C) --> determiner(N,M1,M2,_D),noun(N,M1),verb_phrase(N,M2), [except], noun(N,M3), {C=[(C1:-C2,not C3)], M1=(_X2=>C2), M2=(_X1=>C1), M3=(_X3=>C3)}.
 sentence1(C) --> proper_noun(N,X),verb_phrase(N,T), {T=[(not X=>L)], C=[(not L:-true )]}.
 
 
