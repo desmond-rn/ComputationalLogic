@@ -105,8 +105,8 @@ determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2:-true)]) -->[some].
 %%%%% -------------->  I added this  <-----------------
 determiner(p, sk=>H1, sk=>H2, [(H2:-true),(H1:-true)]) -->[some].
 
-proper_noun(s,tweety) --> [tweety].
-proper_noun(s,peter) --> [peter].
+% proper_noun(s,tweety) --> [tweety].
+% proper_noun(s,peter) --> [peter].
 
 %%%%% -------------->  I added this  <-----------------
 % proper_noun(s,roussel) --> [roussel].
