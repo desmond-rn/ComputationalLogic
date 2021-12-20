@@ -93,7 +93,7 @@ def write_new_prolexa(path, lines):
         f.write(l)
 
 def escape_and_call_prolexa(pl, text):
-    update_rules(tagger, text)
+    # update_rules(tagger, text)
     #update_knowledge_store(pl)
     initialise_prolexa(pl)
 
