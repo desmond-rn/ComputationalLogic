@@ -6,6 +6,9 @@ import string
 from enum import Enum
 from flair.data import Sentence
 from flair.models import SequenceTagger
+
+import nltk
+nltk.download()
 from nltk.stem import WordNetLemmatizer
 
 from prolexa import PACKAGE_PATH, PROLOG_PATH
