@@ -5,6 +5,8 @@ import string
 
 from enum import Enum
 from flair.data import Sentence
+import nltk
+nltk.download()
 from flair.models import SequenceTagger
 from nltk.stem import WordNetLemmatizer
 
