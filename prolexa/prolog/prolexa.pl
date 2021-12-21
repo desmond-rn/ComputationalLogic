@@ -23,8 +23,8 @@
 % stored_rule(1,[(human(peter):-true)]).
 
 % %%%%% -------------->  I uncommented this  <-----------------
-stored_rule(1,[(human(sk):-true), (genius(sk):-true)]).
-stored_rule(1,[(win(X):-genius(X))]).
+% stored_rule(1,[(human(sk):-true), (genius(sk):-true)]).
+% stored_rule(1,[(win(X):-genius(X))]).
 % stored_rule(1,[(genius(desmond):-true)]).
 
 %%%%% -------------->  For negation  <-----------------
