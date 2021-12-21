@@ -80,7 +80,7 @@ verb_phrase(s,M) --> [is],property(s,M).
 verb_phrase(p,M) --> [are],property(p,M).
 
 %%%%% -------------->  I added this  <-----------------
-% verb_phrase(N,M) --> iverb(N,M),[prizes].
+verb_phrase(N,M) --> iverb(N,M),[prizes].
 
 verb_phrase(N,M) --> iverb(N,M).
 
