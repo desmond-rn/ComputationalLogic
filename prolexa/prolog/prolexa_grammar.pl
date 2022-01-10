@@ -103,7 +103,7 @@ determiner(p,X=>B,X=>H,[(H:-B)]) --> [all].
 determiner(p,X=>B,X=>H,[(H:-B)]) --> [].
 determiner(p, sk=>H1, sk=>H2, [(H2:-true),(H1:-true)]) --> [some].
 %%%%% -------------->  I added this  <-----------------
-determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2:-true)]) --> [some].
+% determiner(p, sk=>H1, sk=>H2, [(H1:-true),(H2:-true)]) --> [some].
 
 proper_noun(s,tweety) --> [tweety].
 proper_noun(s,peter) --> [peter].
