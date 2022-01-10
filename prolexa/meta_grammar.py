@@ -8,10 +8,11 @@ from flair.data import Sentence
 from flair.models import SequenceTagger
 
 import nltk
-nltk.download('popular')
 from nltk.stem import WordNetLemmatizer
 
 from prolexa import PACKAGE_PATH, PROLOG_PATH
+
+nltk.download('omw-1.4')
 
 PROLOG_DET_REGEX = r'determiner\([a-z],X=>B,X=>H,\[\(H:-B\)\]\)(.*)'
 PROLOG_DET = 'determiner(p,X=>B,X=>H,[(H:-B)]) --> [{}].\n'
